@@ -1,0 +1,5 @@
+__pycache__
+.venv
+config.y*
+mallmu.log
+simple_reverse_shell
