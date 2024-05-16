@@ -9,12 +9,6 @@ openai:
 EOF
 ```
 
-## Install python environment
-
-```bash
-# install requirements in virtual environment
-```
-
 ## Run the app
 
 ```bash
