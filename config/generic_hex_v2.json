@@ -1,0 +1,83 @@
+{
+    "model": "gpt-4",
+    "max_tokens": "1000",
+    "temperature": "0.2",
+    "history": [
+        {
+            "type": "system",
+            "role": "system",
+            "content": "You are a malware analyst. You are supposed to identify all indicator of compromise (ioc) from the provided malware analysis artifacts. The code might contain instructions in iocs in hex and/or in base64 encoded strings."
+        },
+        {
+            "type": "artifacts",
+            "artifacts": [
+                    {
+                        "prompt_artifact": "This is malicious code:\n```\n<code>\n```\nDo you find any IOCs?",
+                        "prompt_ioc_reasoning": "Why is that an ioc?",
+                        "prompt_continue_or_quit": "Do you find more iocs? If not, just answer with :wq"
+                    }
+            ],
+            "tools": [{
+                "type": "function",
+                "function_call": "auto",
+                "function": {
+                    "name": "get_ioc",
+                    "description": "Get IOCs from inserted code",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "line_no": {
+                                "type": "string",
+                                "description": "The line number of the found ioc"
+                            },
+                            "line": {"type": "string", "description": "The line found"},
+                            "ioc_type": {
+                                "type": "string",
+                                "enum": [
+                                    "IP Address",
+                                    "Domain Name",
+                                    "URL",
+                                    "File Hash",
+                                    "Email Address",
+                                    "X-Mailer",
+                                    "HTTP User Agent",
+                                    "File Mutex"
+                                ],
+                                "description": "The type of the found ioc"
+                            },
+                            "ioc": {"type": "string", "description": "The ioc found"}
+                        },
+                        "required": ["ioc", "ioc_type"]
+                    }
+                }
+            }]
+        },
+        {
+            "type": "yara",
+            "prompt": "Can you create a yara rule?\n A yara rule looks similar like this:\n`rule Some_rule_name { strings: $a = \"placeholder\" condition: $a }`.\nCreate a yara rule based on the provided ioc:\n",
+            "tools": [{
+                "type": "function",
+                "function_call": "auto",
+                "function": {
+                    "name": "get_yara_rules",
+                    "description": "Get yara rule from iocs",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "yara_rule": {
+                                "type": "string",
+                                "description": "Yara rules identifying the ioc"
+                            }
+                        },
+                        "required": ["yara_rule"]
+                    }
+                }
+            }]
+        },
+        {
+            "type": "summary",
+            "role": "user",
+            "content": "Give me a summary of what the code is doing and the iocs you have found."
+        }
+    ]
+} 
