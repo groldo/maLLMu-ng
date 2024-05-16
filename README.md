@@ -13,15 +13,24 @@ EOF
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate && python3 -m pip install -r requirements.txt
-python3 main.py # only RestAPI interface
-python3 main.py --gui # for gradio interface
 python3 main.py --help
+python3 main.py # only RestAPI interface
+python3 main.py --gui # for gradio interface on http://127.0.0.1:7860
 ```
 
-## Compile simple_reverse_shell
+### Test with `test_e2e_with_elffile_rev_shell.py`
+
+The whole frontend procedure of `maLLMu-ng` can be see in `test_e2e_with_elffile_rev_shell.py`.
+After setting up the application run:
+
+```bash
+python3 e2e/test_e2e_with_elffile_rev_shell.py
+```
+
+### Compile simple_reverse_shell
 
 `simple_reverse_shell` is as the name states a simple reverse shell,
-which can be used for testing purposes.
+which can be used for testing purposes in the GUI.
 The application doesn't actually executes the file and just disassambles the 
 binary file and gets the `strings` output from it.
 
@@ -33,14 +42,7 @@ sudo apt install gcc
 gcc -o simple_reverse_shell e2e/simple_reverse_shell.c
 ```
 
-### Test with `test_e2e_with_elffile_rev_shell.py`
-
-The whole frontend procedure of `maLLMu-ng` can be see in `test_e2e_with_elffile_rev_shell.py`.
-After setting up the application run:
-
-```bash
-python3 e2e/test_e2e_with_elffile_rev_shell.py
-```
+The `simple_reverse_shell` binary can then be used to play around with the gradio user interface on `http://127.0.0.1:7860`.
 
 ## Development
 
